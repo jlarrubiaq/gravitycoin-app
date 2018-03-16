@@ -1,6 +1,7 @@
 // Fill the DB with example data on startup
 
 import { Meteor } from 'meteor/meteor';
+import Web3 from 'web3';
 import { Links } from '../../api/links/links.js';
 
 Meteor.startup(() => {
@@ -31,4 +32,13 @@ Meteor.startup(() => {
 
     data.forEach(link => Links.insert(link));
   }
+
+
+
+    let web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+  console.log(web3);
+  console.log( web3.eth.defaultAccount);
+
+
+
 });
