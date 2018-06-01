@@ -1,0 +1,15 @@
+<template name="header">
+  <header class="main-header">
+    <ul>
+      {{#unless currentRoute 'home'}}
+        <li><a href="{{pathFor 'home'}}">Home</a></li>
+      {{/unless}}
+      {{#if currentUser}}
+        <li><a href="#" class="logout">Logout</a></li>
+      {{else}}
+        <li><a href="{{pathFor 'login'}}">Login</a></li>
+        <li><a href="{{pathFor 'register'}}">Register</a></li>
+      {{/if}}
+    </ul>
+  </header>
+</template>
