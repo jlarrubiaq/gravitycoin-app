@@ -1,4 +1,9 @@
-<template name="App_home">
+<template name="home">
   <h1>HELLO!!</h1>
   <p>Welcome to Jesus' site</p>
+  <ul>
+  {{#each user in users}}
+    <li>{{user.username}}</li>
+  {{/each}}
+  </ul>
 </template>
