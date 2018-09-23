@@ -1,6 +1,6 @@
 <template name="header">
   <header class="main-header">
-    <ul>
+    <ul class="pull-left">
       {{#unless currentRoute 'home'}}
         <li><a href="{{pathFor 'home'}}">Home</a></li>
       {{/unless}}
@@ -11,5 +11,8 @@
         <li><a href="{{pathFor 'register'}}">Register</a></li>
       {{/if}}
     </ul>
+    <div class="pull-right">
+      {{> userBasicInfo}}
+    </div>
   </header>
 </template>

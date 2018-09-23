@@ -20,7 +20,8 @@ Meteor.methods({
       throw new Error(`ERROR creating Eth account - User not found: ${email}`);
     }
 
-    let web3 = new Web3jsWrapper();
+    const web3Wrapper = new Web3jsWrapper();
+    const web3 = web3Wrapper.getWeb3Instance();
 
     let account = web3.eth.accounts.create();
     let update = Ethaccounts.insert({
@@ -39,6 +40,17 @@ Meteor.methods({
     return {
       message: "The account was created successfully in the Ethereum network!.",
     }
-
   },
+  getUserBalance: (userId) => {
+    check(userId, String);
+    // @todo: Check the id is the same as current user id.
+
+    const account = Ethaccounts.findOne({ userId });
+    if (!account) {
+      throw new Error(`ERROR retrieving user balance: Not found account for userId: ${userId}`);
+    }
+
+    let web3 = new Web3jsWrapper();
+    return web3.getAccountBalance(account.address);
+  }
 });

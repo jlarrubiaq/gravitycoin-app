@@ -28,3 +28,4 @@ accounts-ui
 twbs:bootstrap
 fortawesome:fontawesome
 check
+simple:reactive-method
