@@ -1,8 +1,12 @@
 import { Meteor } from "meteor/meteor";
 import { Web3jsWrapper } from "../models/Web3jsWrapper";
-import { Ethaccounts } from "../../collections";
+import { Match } from 'meteor/check'
+import { Ethaccounts } from "../../common/collections/ethaccounts";
 
 Meteor.methods({
+  /**
+   * 
+   */
   createAccount: (email) => {
     check(email, String);
 
@@ -41,6 +45,10 @@ Meteor.methods({
       message: "The account was created successfully in the Ethereum network!.",
     }
   },
+
+  /**
+   * 
+   */
   getUserBalance: (userId) => {
     check(userId, String);
     // @todo: Check the id is the same as current user id.
@@ -51,6 +59,39 @@ Meteor.methods({
     }
 
     let web3 = new Web3jsWrapper();
-    return web3.getAccountBalance(account.address);
+    try {
+      return web3.getAccountBalance(account.address);
+    } catch(error) {
+      return {
+        error: 1,
+        message: error
+      };
+    }
+  },
+
+  /**
+   * 
+   */
+  transfer: (fromUser, toUser, amount) => {
+    check(fromUser, String);
+    check(toUser, String);
+    check(amount, Match.OneOf(String, Number));
+    // @todo: Check the id is the same as current user id.
+
+    const fromAccount = Ethaccounts.findOne({ userId: fromUser });
+    const toAccount = Ethaccounts.findOne({ userId: toUser });
+    if (!fromAccount || !toAccount) {
+      throw new Error(`ERROR transfering token: Not found account for userId: ${fromUser} or ${toUser}`);
+    }
+
+    let web3 = new Web3jsWrapper();
+    try {
+      return web3.transferFrom(fromAccount.address, toAccount.address, parseInt(amount), fromAccount.privateKey);
+    } catch(error) {
+      return {
+        error: 1,
+        message: error
+      };
+    }
   }
 });

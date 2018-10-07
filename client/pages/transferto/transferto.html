@@ -1,0 +1,12 @@
+<template name="transferTo">
+  <h1>Transfer</h1>
+  <h3>Recipient: {{user.username}}</h3>
+  <h4>Account: {{account.address}}</h4>
+  <div>
+    <form id="transferFrom" action="/">
+      Enter the amount to transfer:<br>
+      <input type="text" name="amount" value="0"><br>
+      <input type="submit" value="Trasfer to {{user.username}}">
+    </form>
+  </div>
+</template>
