@@ -1,0 +1,10 @@
+<template name="transferResult">
+  <h1>Transfer</h1>
+  <h3>{{statusText}}</h3>
+  <h4>{{detailsText}}</h4>
+  <div>
+    {{#each details}}
+      <div><strong>{{label}}:</strong> {{value}}</div>
+    {{/each}}
+  </div>
+</template>

@@ -15,6 +15,13 @@ FlowRouter.route('/transferto/:userId', {
   },
 });
 
+FlowRouter.route('/transfer-result/:transferId', {
+  name: 'transferResult',
+  action() {
+    BlazeLayout.render('layoutDefault', { content: 'transferResult' });
+  },
+});
+
 FlowRouter.notFound = {
   action() {
     BlazeLayout.render('layoutDefault', { content: 'App_notFound' });

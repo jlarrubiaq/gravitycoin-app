@@ -1,6 +1,8 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
-import { Ethaccounts } from '/api/ethaccounts/common/collections/ethaccounts';
+import {
+  Ethaccounts
+} from '/api/eth/common/collections/collections';
 
 Template.transferTo.onCreated(() => {
   const template = Template.instance();
@@ -36,14 +38,13 @@ Template.transferTo.events({
     const fromUser = Meteor.userId();
     const toUser = FlowRouter.getParam("userId");
 
-    Meteor.call('transfer', fromUser, toUser, amount, function(error) {
-      if(error){
-        console.log(error);
-        //FlowRouter.go("transferFailed");
+    Meteor.call('transfer', fromUser, toUser, amount, function(error, transfer) {
+      if (error){
+        console.log('Error', error);
       } else {
-        console.log('success');
-        //FlowRouter.go("transferSuccess");
+        console.log('Success', transfer);
       }
+      FlowRouter.go("transferResult", { transferId: transfer._id });
     });
   }
 });

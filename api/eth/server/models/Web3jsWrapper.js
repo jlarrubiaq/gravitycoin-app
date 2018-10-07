@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-import { Ethaccounts } from '../../common/collections/ethaccounts';
 
 export class Web3jsWrapper {
   /**

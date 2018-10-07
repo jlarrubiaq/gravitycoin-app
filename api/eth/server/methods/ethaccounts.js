@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Web3jsWrapper } from "../models/Web3jsWrapper";
 import { Match } from 'meteor/check'
-import { Ethaccounts } from "../../common/collections/ethaccounts";
+import { Ethaccounts, Ethtransfers } from "../../common/collections/collections";
 
 Meteor.methods({
   /**
@@ -85,13 +85,32 @@ Meteor.methods({
     }
 
     let web3 = new Web3jsWrapper();
-    try {
-      return web3.transferFrom(fromAccount.address, toAccount.address, parseInt(amount), fromAccount.privateKey);
-    } catch(error) {
-      return {
-        error: 1,
-        message: error
+    return web3.transferFrom(fromAccount.address, toAccount.address, parseInt(amount), fromAccount.privateKey)
+    .then(receipt => {
+      const transfer = {
+        status: 'success',
+        from: receipt.from,
+        to: toAccount.address,
+        gasUsed: receipt.gasUsed,
+        transactionHash: receipt.transactionHash
       };
-    }
+      const transferId = Ethtransfers.insert(transfer);
+      transfer._id = transferId;
+
+      return transfer;
+    })
+    .catch(error => {
+      const transfer = {
+        status: 'error',
+        error: error
+      };
+      const transferId = Ethtransfers.insert(transfer);
+      transfer._id = transferId;
+
+      return {
+        ...transfer,
+        error: 1,
+      };
+    });
   }
 });
