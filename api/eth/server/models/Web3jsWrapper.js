@@ -94,12 +94,12 @@ export class Web3jsWrapper {
       .then(transaction =>  {
         this.web3.eth.sendSignedTransaction(transaction.rawTransaction)
           .on('receipt', (receipt) => {
-          console.log('Transfer transaction finished succesfully:', receipt);
+          // console.log('Transfer transaction finished succesfully:', receipt);
           resolve(receipt);
         })
         .on('error', error => {
-          console.log('ERROR in transfer transaction:', error);
-          reject(error);
+          // console.log('ERROR in transfer transaction:', error.message);
+          reject(error.message);
         });
       })
       .catch(error => {
