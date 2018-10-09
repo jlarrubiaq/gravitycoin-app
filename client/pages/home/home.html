@@ -1,14 +1,28 @@
 <template name="home">
-  <h1>GRAVITYCOIN APP</h1>
-  <h2>Send money to your friends</h2>
-  <h3>Current users</h3>
-  {{#if users}}
-    <ul>
-      {{#each user in users}}
-        <li>{{user.username}} - <a href="/transferto/{{user._id}}">Make transfer</a></li>
-      {{/each}}
-    </ul>
+  <h3>Send money to your friends</h3>
+  {{#if isLoggedInUser}}
+    <table>
+      <thead>
+        <tr>
+          <th>Current users</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#if users}}
+          {{#each user in users}}
+            <tr>
+              <td>{{user.username}}</td>
+              <td><a href="/transferto/{{user._id}}">Make transfer</a></td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td>No active users right now.</td>
+          </tr>
+        {{/if}}
+        </tbody>
+    </table>
   {{else}}
-    No active users right now.
+    You need to login to start trasfer tokens to your friends.
   {{/if}}
 </template>

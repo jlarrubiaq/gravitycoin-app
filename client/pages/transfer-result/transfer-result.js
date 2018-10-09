@@ -1,7 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import {
-  Ethaccounts
-} from '/api/eth/common/collections/collections';
+import { Template } from 'meteor/templating';
 import { Ethtransfers } from '../../../api/eth/common/collections/collections';
 
 Template.transferResult.onCreated(() => {
@@ -12,15 +10,24 @@ Template.transferResult.onCreated(() => {
 });
 
 Template.transferResult.helpers({
+  statusSuccess() {
+    const transferId = FlowRouter.getParam("transferId");
+    const transfer = Ethtransfers.findOne({ _id: transferId });
+
+    if (transfer) {
+      return transfer.status === 'success';
+    }
+  },
   /**
    * Text with transfer status.
    */
   statusText() {
     const transferId = FlowRouter.getParam("transferId");
     const transfer = Ethtransfers.findOne({ _id: transferId });
-    console.log('transfer', transfer);
 
-    return transfer.status === 'success' ? 'Cool! The transfer was successful!' : 'Oh no! There was an error with your transfer';
+    if (transfer) {
+      return transfer.status === 'success' ? 'Cool! The transfer was successful!' : 'Oh no! There was an error with your transfer';
+    }
   },
   /**
    * Text with transfer details message.
@@ -29,7 +36,9 @@ Template.transferResult.helpers({
     const transferId = FlowRouter.getParam("transferId");
     const transfer = Ethtransfers.findOne({ _id: transferId });
 
-    return transfer.status === 'success' ? 'Transaction details' : 'Details';
+    if (transfer) {
+      return transfer.status === 'success' ? 'Transaction details' : 'Details';
+    }
   },
   /**
    * Details of the transfer.
@@ -39,32 +48,32 @@ Template.transferResult.helpers({
     const transfer = Ethtransfers.findOne({ _id: transferId });
     const details = [];
 
-    if (transfer.status === 'success') {
-      details.push({
-        label: 'Sender address',
-        value: transfer.from
-      });
-      details.push({
-        label: 'Recepient address',
-        value: transfer.to
-      });
-      details.push({
-        label: 'Used gas',
-        value: transfer.gasUsed
-      });
-      details.push({
-        label: 'Transaction Hash',
-        value: transfer.transactionHash
-      });
-    } else {
-      const error = Template.instance().data.error;
-
-      details.push({
-        label: 'Error',
-        value: transfer.error
-      });
+    if (transfer) {
+      if (transfer.status === 'success') {
+        details.push({
+          label: 'Sender address',
+          value: transfer.from
+        });
+        details.push({
+          label: 'Recepient address',
+          value: transfer.to
+        });
+        details.push({
+          label: 'Used gas',
+          value: transfer.gasUsed
+        });
+        details.push({
+          label: 'Transaction Hash',
+          value: transfer.transactionHash
+        });
+      } else {
+        details.push({
+          label: 'Error',
+          value: transfer.error
+        });
+      }
+  
+      return details;
     }
-
-    return details;
   },
 });

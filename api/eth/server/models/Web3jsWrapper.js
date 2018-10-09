@@ -103,7 +103,7 @@ export class Web3jsWrapper {
         });
       })
       .catch(error => {
-        reject(error);
+        reject(error.message);
       });
     });
   }

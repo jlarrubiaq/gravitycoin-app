@@ -1,12 +1,34 @@
 <template name="transferTo">
-  <h1>Transfer</h1>
-  <h3>Recipient: {{user.username}}</h3>
-  <h4>Account: {{account.address}}</h4>
-  <div>
+  <h3>Transfer</h3>
+  <table>
+    <thead>
+        <tr>
+          <th>Recipient details</th>
+        </tr>
+      </thead>
+    <tbody>
+        <tr>
+          <td><strong>Username</strong></td>
+          <td>{{user.username}}</td>
+        </tr>
+      <tr>
+        <td><strong>Account</strong></td>
+        <td>{{account.address}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="divider"></div>
+  <div class="section">
     <form id="transferFrom" action="/">
       Enter the amount to transfer:<br>
-      <input type="text" name="amount" value="0"><br>
-      <input type="submit" value="Transfer to {{user.username}}">
+      <input placeholder="Enter the amount to transfer" type="number" name="amount" value="0"><br>
+      {{#unless isLoading}}
+        <input type="submit" class="btn" value="Transfer to {{user.username}}">
+      {{else}}
+        <div class="progress">
+            <div class="indeterminate"></div>
+        </div>
+      {{/unless}}
     </form>
   </div>
 </template>

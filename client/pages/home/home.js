@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
 
 /**
  * On created.
@@ -18,4 +19,11 @@ Template.home.helpers({
   users() {
     return Meteor.users.find().fetch().filter(user => user._id !== Meteor.userId());
   },
+
+  /**
+   * Whether the current user is logged in or not.
+   */
+  isLoggedInUser() {
+    return Meteor.userId() ? true : false;
+  }
 });

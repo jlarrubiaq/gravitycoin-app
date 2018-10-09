@@ -1,18 +1,24 @@
 <template name="header">
   <header class="main-header">
-    <ul class="pull-left">
-      {{#unless currentRoute 'home'}}
-        <li><a href="{{pathFor 'home'}}">Home</a></li>
-      {{/unless}}
-      {{#if currentUser}}
-        <li><a href="#" class="logout">Logout</a></li>
-      {{else}}
-        <li><a href="{{pathFor 'login'}}">Login</a></li>
-        <li><a href="{{pathFor 'register'}}">Register</a></li>
-      {{/if}}
-    </ul>
-    <div class="pull-right">
-      {{> userBasicInfo}}
-    </div>
+    <nav>
+      <div class="nav-wrapper">
+          <a href="/" class="brand-logo center">GravityCoin</a>
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            {{#if currentUser}}
+              <li><a href="#" class="logout">Logout</a></li>
+            {{else}}
+              {{#unless currentRoute 'login'}}
+                <li><a href="{{pathFor 'login'}}">Login</a></li>
+              {{/unless}}
+              {{#unless currentRoute 'register'}}
+                <li><a href="{{pathFor 'register'}}">Register</a></li>
+              {{/unless}}
+            {{/if}}
+            </ul>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          {{> userBasicInfo}}
+        </ul>
+      </div>
+    </nav>
   </header>
 </template>
