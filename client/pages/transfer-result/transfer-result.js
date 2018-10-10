@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Ethtransfers } from '../../../api/eth/common/collections/collections';
 
@@ -47,6 +48,7 @@ Template.transferResult.helpers({
     const transferId = FlowRouter.getParam("transferId");
     const transfer = Ethtransfers.findOne({ _id: transferId });
     const details = [];
+    const tokenSymbol = Meteor.settings.TOKEN_SYMBOL;
 
     if (transfer) {
       if (transfer.status === 'success') {
@@ -60,7 +62,7 @@ Template.transferResult.helpers({
         });
         details.push({
           label: 'Amount',
-          value: transfer.amount ? `${transfer.amount} GTC` : `0 GTC`
+          value: transfer.amount ? `${transfer.amount} ${tokenSymbol}` : `0 ${tokenSymbol}`
         });
         details.push({
           label: 'Used gas',

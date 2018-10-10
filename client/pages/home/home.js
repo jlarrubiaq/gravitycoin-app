@@ -25,5 +25,12 @@ Template.home.helpers({
    */
   isLoggedInUser() {
     return Meteor.userId() ? true : false;
+  },
+
+  /**
+   * Return token name.
+   */
+  tokenName() {
+    return Meteor.settings.TOKEN_NAME;
   }
 });

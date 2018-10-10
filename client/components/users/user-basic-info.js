@@ -2,11 +2,20 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveMethod } from "meteor/simple:reactive-method";
 
+
 Template.userBasicInfo.onCreated(() => {
   const template = Template.instance();
   template.subscribe("ethaccounts", { userId: Meteor.userId() });
 });
 
+Template.userBasicInfo.helpers({
+  /**
+   * Return token name.
+   */
+  tokenSymbol() {
+    return Meteor.settings.TOKEN_SYMBOL;
+  },
+});
 
 Template.userBasicInfo.helpers({
   username: () => {
