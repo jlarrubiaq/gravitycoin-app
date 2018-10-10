@@ -59,6 +59,10 @@ Template.transferResult.helpers({
           value: transfer.to
         });
         details.push({
+          label: 'Amount',
+          value: transfer.amount ? `${transfer.amount} GTC` : `0 GTC`
+        });
+        details.push({
           label: 'Used gas',
           value: transfer.gasUsed
         });

@@ -92,8 +92,11 @@ Meteor.methods({
         from: receipt.from,
         to: toAccount.address,
         gasUsed: receipt.gasUsed,
-        transactionHash: receipt.transactionHash
+        transactionHash: receipt.transactionHash,
+        amount: amount,
+        receipt: receipt
       };
+
       const transferId = Ethtransfers.insert(transfer);
       transfer._id = transferId;
 
