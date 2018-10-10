@@ -2,12 +2,16 @@
   <div class="panel-heading">
     <div class="panel-title text-center">
       <h3 class="title">Register</h3>
-      <hr/>
     </div>
   </div>
   <div class="main-login main-center">
+    {{#if errorMessage}}
+      <h5>
+          <i class="red-text small material-icons">error_outline</i>
+         {{errorMessage}}
+      </h5>
+    {{/if}}
     <form class="register form-horizontal" method="post" action="#">
-
       <div class="form-group">
         <label for="username" class="cols-sm-2 control-label">Choose your username</label>
         <div class="cols-sm-10">

@@ -6,8 +6,13 @@
     </div>
   </div>
   <div class="main-login main-center">
+      {{#if errorMessage}}
+      <h5>
+        <i class="red-text small material-icons">error_outline</i>
+         {{errorMessage}}
+      </h5>
+    {{/if}}
     <form class="form-horizontal login" method="post" action="#">
-
       <div class="form-group">
         <label for="email" class="cols-sm-2 control-label">Your Email</label>
         <div class="cols-sm-10">
