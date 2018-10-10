@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 
 // Set up all routes in the app
 FlowRouter.route('/', {
@@ -6,6 +7,18 @@ FlowRouter.route('/', {
   action() {
     BlazeLayout.render('layoutDefault', { content: 'home' });
   },
+});
+
+FlowRouter.route('/user-details', {
+  name: 'userDetails',
+  action() {
+    BlazeLayout.render('layoutDefault', { content: 'userDetails' });
+  },
+  triggersEnter() {
+    if (!Meteor.userId()) {
+      FlowRouter.go('home');
+    }
+  }
 });
 
 FlowRouter.route('/transferto/:userId', {
@@ -19,6 +32,13 @@ FlowRouter.route('/transfer-result/:transferId', {
   name: 'transferResult',
   action() {
     BlazeLayout.render('layoutDefault', { content: 'transferResult' });
+  },
+});
+
+FlowRouter.route('/transfers', {
+  name: 'transfers',
+  action() {
+    BlazeLayout.render('layoutDefault', { content: 'transfers' });
   },
 });
 
@@ -41,5 +61,5 @@ FlowRouter.route('/register', {
   name: 'register',
   action() {
     BlazeLayout.render('layoutDefault', { content: 'register' });
-  },
+  }
 });

@@ -1,0 +1,28 @@
+<template name="transfers">
+  <h3>Your transfers</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>To</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#if transfers}}
+          {{#each transfer in transfers}}
+            <tr>
+              <td>{{transfer.transactionHash}}</td>
+              <td>{{transfer.to}}</td>
+              <td>{{transfer.amount}}</td>
+              <td><a href="/transfer-result/{{transfer._id}}">View</a></td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td>No transfers found.</td>
+          </tr>
+        {{/if}}
+        </tbody>
+    </table>
+</template>

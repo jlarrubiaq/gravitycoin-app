@@ -6,6 +6,7 @@
           <ul id="nav-mobile" class="left hide-on-med-and-down">
             {{#if currentUser}}
               <li><a href="#" class="logout">Logout</a></li>
+              <li><a href="{{pathFor 'transfers'}}">Transfers</a></li>
             {{else}}
               {{#unless currentRoute 'login'}}
                 <li><a href="{{pathFor 'login'}}">Login</a></li>

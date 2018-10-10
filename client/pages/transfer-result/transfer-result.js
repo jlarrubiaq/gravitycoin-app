@@ -1,7 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import { Ethtransfers } from '../../../api/eth/common/collections/collections';
+import { Ethtransfers } from '/api/eth/common/collections/collections';
 
 Template.transferResult.onCreated(() => {
   const template = Template.instance();
