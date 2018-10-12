@@ -1,7 +1,8 @@
-import {FlowRouter} from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Accounts } from 'meteor/accounts-base'
 
 Template.login.onCreated(() => {
   const template = Template.instance();

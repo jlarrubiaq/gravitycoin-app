@@ -23,24 +23,16 @@ Meteor.methods({
     if (!user) {
       throw new Error(`ERROR creating Eth account - User not found: ${email}`);
     }
+    let web3 = new Web3jsWrapper();
+    const account = web3.createAccount(user._id);
 
-    const web3Wrapper = new Web3jsWrapper();
-    const web3 = web3Wrapper.getWeb3Instance();
-
-    let account = web3.eth.accounts.create();
-    let update = Ethaccounts.insert({
-      address: account.address,
-      privateKey: account.privateKey,
-      userId: user._id
-    });
-
-    if (!update) {
+    if (account.error) {
       return {
         error: 1,
-        message: "User is not authorised",
+        message: account.message,
       }
     }
-
+   
     return {
       message: "The account was created successfully in the Ethereum network!.",
     }

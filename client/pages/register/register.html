@@ -13,38 +13,94 @@
     {{/if}}
     <form class="register form-horizontal" method="post" action="#">
       <div class="form-group">
-        <label for="username" class="cols-sm-2 control-label">Choose your username</label>
-        <div class="cols-sm-10">
+        <label for="username" class="cols-sm-2 control-label">Username</label>
+       
           <div class="input-group">
             <input type="text" class="form-control" name="username" id="username" placeholder="Choose your username"/>
-          </div>
+          
         </div>
       </div>
 
       <div class="form-group">
-        <label for="email" class="cols-sm-2 control-label">Your Email</label>
-        <div class="cols-sm-10">
+        <label for="email" class="cols-sm-2 control-label">Email</label>
+        
           <div class="input-group">
             <input type="email" class="form-control" name="email" id="email" placeholder="Enter your Email"/>
           </div>
-        </div>
+        
       </div>
 
       <div class="form-group">
         <label for="password" class="cols-sm-2 control-label">Password</label>
-        <div class="cols-sm-10">
-          <div class="input-group">
-            <input type="password" class="form-control" name="password" id="password"
-                   placeholder="Enter your Password"/>
-          </div>
+        <div class="input-group">
+          <input type="password" class="form-control" name="password" id="password"
+                  placeholder="Enter your Password"/>
         </div>
       </div>
 
-      <div class="form-group ">
+      <div class="divider"></div>
+      <div class="login-register">
+          <p>
+          {{#unless useExistingAccount}}
+            <a id="register-existing" href="#">Use an existing Ethereum account</a>
+          {{else}}
+            <a id="register-new" href="#">Create an Ethereum account for me</a>
+          {{/unless}}
+        </p>
+      </div>
+
+      {{#if useExistingAccount}}
+        {{#if useKeyStoreFile}}
+          <div>
+            <div class="form-group">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span>Keystore file</span>
+                  <input name="keystore-file" type="file">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="keystore-password" class="cols-sm-2 control-label">Account password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" name="keystore-password" id="keystore-password"
+                        placeholder="Enter the account password"/>
+              </div>
+            </div>
+          </div>
+        {{else}}
+          <div>
+            <div class="form-group">
+              <label for="private-key" class="cols-sm-2 control-label">Private key</label>
+                <div class="input-group">
+                  <textarea id="private-key" class="materialize-textarea"></textarea>
+              </div>
+            </div>
+          </div>
+        {{/if}}
+        <div class="login-register">
+          <p>
+            {{#if useKeyStoreFile}}
+              <a id="register-existing-privatekey" href="#">I have the private key</a>
+            {{else}}
+              <a id="register-existing-keystore" href="#">Use a keystore file</a>
+            {{/if}}
+          </p>
+        </div>
+        <div class="divider"></div>
+      {{/if}}
+
+
+      <div styleclass="form-group" style="margin-top: 1em;">
         <input class="btn btn-primary btn-lg btn-block login-button" type="submit" value="Register">
       </div>
       <div class="login-register">
-        <a href="/login">Login</a>
+        <p>
+          <a href="/login">Login</a>
+        </p>
       </div>
     </form>
   </div>

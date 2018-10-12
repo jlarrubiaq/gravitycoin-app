@@ -1,12 +1,13 @@
 import Web3 from 'web3';
 import { Meteor } from "meteor/meteor";
+import { Ethaccounts } from '../../common/collections/collections';
 
 export class Web3jsWrapper {
   /**
    * 
    * @param {*} httpProvider 
    */
-  constructor(httpProvider = Meteor.settings.NETWORK_URL, chainId = 3) {
+  constructor(httpProvider = Meteor.settings.NETWORK_URL) {
     // @todo: Get this info from config file!
     this.web3 = new Web3(new Web3.providers.HttpProvider(httpProvider));
     // ChainId is 3 for the test network ropsten. 
@@ -25,6 +26,40 @@ export class Web3jsWrapper {
    */
   getWeb3Instance() {
     return this.web3;
+  }
+
+  /**
+   * 
+   * @param {*} userId 
+   */
+  createAccount(userId) {
+    try {
+      let account = this.web3.eth.accounts.create();
+      let accountData = {
+        address: account.address,
+        privateKey: account.privateKey,
+        userId: userId
+      };
+
+      let accountId = Ethaccounts.insert(accountData);
+
+      if (!update) {
+        return {
+          error: 1,
+          message: `ERROR creating Eth account in DB`
+        }
+      }
+
+      return {
+        ...accountData,
+        _id: accountId
+      }
+    } catch(error) {
+      return {
+        error: 1,
+        message: `ERROR creating Eth account: ${error.message}`
+      }
+    }
   }
 
   /**
