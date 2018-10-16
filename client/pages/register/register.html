@@ -95,7 +95,13 @@
 
 
       <div styleclass="form-group" style="margin-top: 1em;">
-        <input class="btn btn-primary btn-lg btn-block login-button" type="submit" value="Register">
+        {{#unless isLoading}}
+          <input class="btn btn-primary btn-lg btn-block login-button" type="submit" value="Register">
+        {{else}}
+          <div class="progress">
+              <div class="indeterminate"></div>
+          </div>
+        {{/unless}}
       </div>
       <div class="login-register">
         <p>

@@ -4,68 +4,101 @@ import { Ethaccounts } from '../../common/collections/collections';
 
 export class Web3jsWrapper {
   /**
+   * Web3jsWrapper.
    * 
-   * @param {*} httpProvider 
+   * Initialise Web3 object with platform-dependant parameters.
+   * 
+   * @param {*} httpProvider - Ethereum network.
    */
   constructor(httpProvider = Meteor.settings.NETWORK_URL) {
-    // @todo: Get this info from config file!
     this.web3 = new Web3(new Web3.providers.HttpProvider(httpProvider));
+    
     // ChainId is 3 for the test network ropsten. 
     this.chainId = Meteor.settings.NETWORK_CHAINID;
-
      // This is the contract deployed to the Eth network with the token info.
     this.tokenAddress = Meteor.settings.TOKEN_ADDRESS;
     
-    let abiOfContract = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"_totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"tokenOwner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"acceptOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeSub","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeDiv","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"},{"name":"data","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeMul","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[],"name":"newOwner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"tokenAddress","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferAnyERC20Token","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"tokenOwner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"a","type":"uint256"},{"name":"b","type":"uint256"}],"name":"safeAdd","outputs":[{"name":"c","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"tokenOwner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"tokens","type":"uint256"}],"name":"Approval","type":"event"}]`;
+    let abiOfContract = Meteor.settings.TOKEN_ABI;
     abiOfContract = JSON.parse(abiOfContract);
     this.contract = new this.web3.eth.Contract(abiOfContract, this.tokenAddress);
   }
 
   /**
-   * Get a Web3 instance.
+   * Get the Web3 instance.
+   * 
+   * @return {Object} - Web3 instance.  
    */
   getWeb3Instance() {
     return this.web3;
   }
 
   /**
+   * Create an account in the ethereum network for an user.
    * 
-   * @param {*} userId 
+   * @param {String} userId - Id of the user.
+   *
+   * @return {Object} - Created Ethereum account.  
    */
   createAccount(userId) {
+    let account;
+
     try {
-      let account = this.web3.eth.accounts.create();
-      let accountData = {
-        address: account.address,
-        privateKey: account.privateKey,
-        userId: userId
-      };
-
-      let accountId = Ethaccounts.insert(accountData);
-
-      if (!update) {
-        return {
-          error: 1,
-          message: `ERROR creating Eth account in DB`
-        }
-      }
-
-      return {
-        ...accountData,
-        _id: accountId
-      }
-    } catch(error) {
+      account = this.web3.eth.accounts.create();
+    } catch (error) {
       return {
         error: 1,
-        message: `ERROR creating Eth account: ${error.message}`
+        message: `ERROR creating Ethereum account: ${error.message}`
       }
+    }
+    
+    return this.associateAccount(userId, account);
+  }
+
+  /**
+   * Associate an Ethereum account with an user.
+   * 
+   * @param {String} userId - Id of the user.
+   *
+   * @return {Object} - Created Ethereum account.
+   */
+  associateAccount(userId, account) {
+    let accountData = {
+      address: account.address,
+      privateKey: account.privateKey,
+      userId: userId
+    };
+
+    const existing = Ethaccounts.findOne({ address: account.address });
+    if (existing) {
+      return {
+        error: 1,
+        message: `ERROR associating Ethereum account to the user: The account already exist`
+      }
+    }
+
+    let accountId = Ethaccounts.insert(accountData);
+    if (!accountId) {
+      return {
+        error: 1,
+        message: `ERROR associating Ethereum account: The account couldn't be persisted in DB`
+      }
+    }
+
+    return {
+      ...accountData,
+      _id: accountId
+    }
+  } catch(error) {
+    return {
+      error: 1,
+      message: `ERROR associating Eth account: ${error.message}`
     }
   }
 
   /**
    * Get the balance of an account.
    *
-   * @param {*} account - Account address.
+   * @param {String} account - Account address.
    * 
    * @returns {Promise<number>} - The account balance.
    */
@@ -78,7 +111,6 @@ export class Web3jsWrapper {
           resolve(data)
         })
         .catch(error => {
-          console.log(error); // Dump errors here
           reject(error);
           return;
         });
@@ -88,10 +120,10 @@ export class Web3jsWrapper {
   /**
    * Transfer tokens between accounts.
    * 
-   * @param {*} fromAccount - sender account address. It is required to have
+   * @param {String} fromAccount - sender account address. It is required to have
    *  tokens and Ether.
-   * @param {*} toAccount - recipient account address.
-   * @param {*} amount - tokens to send.
+   * @param {String} toAccount - recipient account address.
+   * @param {String} amount - tokens to send.
    * 
    * @returns {Promise<Object>} - The transaction receipt.
    */

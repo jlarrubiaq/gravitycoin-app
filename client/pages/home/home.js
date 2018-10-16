@@ -6,7 +6,6 @@ import { Meteor } from 'meteor/meteor';
  */
 Template.home.onCreated(() => {
   let template = Template.instance();
-  // @todo: limit this to 10 users?
   template.subscribe("usersProfile");
 });
 

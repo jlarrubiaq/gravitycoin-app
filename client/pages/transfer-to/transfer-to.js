@@ -11,7 +11,6 @@ Template.transferTo.onCreated(() => {
   const userId = FlowRouter.getParam("userId");
   template.isLoading = new ReactiveVar(false);
 
-  // @todo: limit this to 10 users?
   template.subscribe("usersProfile", { _id: userId });
   template.subscribe("ethAccounts", { userId: userId });
 });
