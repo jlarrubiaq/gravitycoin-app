@@ -19,6 +19,7 @@ Template.transfers.helpers({
    */
   transfers() {
     const ethAccount = Ethaccounts.findOne({ userId: Meteor.userId() });
-    return Ethtransfers.find({ from: ethAccount.address }).fetch();
+
+    return Ethtransfers.find({ from: ethAccount.address.toLowerCase() }).fetch();
   },
 });
